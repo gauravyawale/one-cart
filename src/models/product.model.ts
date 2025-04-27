@@ -47,7 +47,7 @@ const productSchema: Schema<IProduct> = new Schema(
       },
     ],
     sellerId: {
-      tyepe: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User", // reference to the User collection
       required: true,
     },
