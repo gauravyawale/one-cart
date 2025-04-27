@@ -38,16 +38,19 @@ const PaymentAttemptSchema = new Schema<IPaymentAttempt>(
 );
 
 // 4. Define the schema for Payment
-const PaymentSchema = new Schema<IPayment>({
-  orderId: { type: Schema.Types.ObjectId, ref: "Order", required: true },
-  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  attempts: [PaymentAttemptSchema],
-  currentStatus: {
-    type: String,
-    enum: ["pending", "succeeded", "failed"],
-    default: "pending",
+const PaymentSchema = new Schema<IPayment>(
+  {
+    orderId: { type: Schema.Types.ObjectId, ref: "Order", required: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    attempts: [PaymentAttemptSchema],
+    currentStatus: {
+      type: String,
+      enum: ["pending", "succeeded", "failed"],
+      default: "pending",
+    },
   },
-});
+  { timestamps: true }
+);
 
 // 5. Create the Payment model
 const PaymentModel: Model<IPayment> = mongoose.model<IPayment>(
