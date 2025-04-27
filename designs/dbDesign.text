@@ -1,0 +1,76 @@
+Table users {
+  id ObjectId [pk]
+  firstName string
+  lastName string
+  email string [unique]
+  password string
+  role enum // customer, admin, seller
+  createdAt datetime
+}
+
+Table products {
+  id ObjectId [pk]
+  name string
+  description string
+  price number
+  stock number
+  category string
+  images string[] // array of URLs
+  sellerId ObjectId [ref: > users.id] // seller who uploaded
+  ratings number
+  numOfReviews number
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table carts {
+  id ObjectId [pk]
+  userId ObjectId [ref: > users.id]
+  cartItems JSON // array of { productId, quantity }
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table orders {
+  id ObjectId [pk]
+  userId ObjectId [ref: > users.id]
+  orderItems JSON // array of { productId, quantity }
+  shippingAddress JSON // { address, city, postalCode, country }
+  paymentMethod string
+  paymentResult JSON // { id, status, update_time, email }
+  totalAmount number
+  orderStatus string
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table payments {
+  id ObjectId [pk]
+  orderId ObjectId [ref: - orders.id] // one payment per order
+  totalAmount number
+  finalStatus enum // pending, succeeded, failed, refunded
+  paymentProvider string // like stripe, paypal
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table reviews {
+  id ObjectId [pk]
+  productId ObjectId [ref: > products.id]
+  userId ObjectId [ref: > users.id]
+  rating number
+  comment string
+  createdAt datetime
+  updatedAt datetime
+}
+
+Table payment_attempts {
+  id ObjectId [pk]
+  paymentId ObjectId [ref: > payments.id] // which payment this attempt belongs to
+  attemptNumber int // 1,2,3,...
+  status enum // pending, succeeded, failed
+  providerTransactionId string
+  amount number
+  attemptAt datetime
+  responseData JSON // raw API response from Stripe/PayPal etc
+}
