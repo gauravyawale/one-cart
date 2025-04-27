@@ -55,47 +55,50 @@ const orderItemSchema: Schema<IOrderItem> = new Schema({
 });
 
 // 5. Define the ShippingAddress Schema
-const shippingAddressSchema: Schema<IShippingAddress> = new Schema({
-  fullName: {
-    type: String,
-    required: true,
-    trim: true,
+const shippingAddressSchema: Schema<IShippingAddress> = new Schema(
+  {
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    addressLine1: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    addressLine2: {
+      type: String,
+      trim: true,
+    },
+    city: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    state: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    postalCode: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    country: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
   },
-  addressLine1: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  addressLine2: {
-    type: String,
-    trim: true,
-  },
-  city: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  state: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  postalCode: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  country: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-});
+  { _id: false }
+);
 
 // 6. Define the Order Schema
 const orderSchema: Schema<IOrder> = new Schema({
