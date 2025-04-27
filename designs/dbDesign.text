@@ -38,9 +38,7 @@ Table orders {
   shippingAddress JSON // { address, city, postalCode, country }
   paymentMethod string
   paymentResult JSON // { id, status, update_time, email }
-  totalPrice number
-  isPaid boolean
-  paidAt datetime
+  totalAmount number
   orderStatus string
   createdAt datetime
   updatedAt datetime
