@@ -1,6 +1,7 @@
 Table users {
   id ObjectId [pk]
-  name string
+  firstName string
+  lastName string
   email string [unique]
   password string
   role enum // customer, admin, seller
