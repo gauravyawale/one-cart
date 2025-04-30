@@ -1,36 +1,40 @@
 {
   "name": "one-cart",
   "version": "1.0.0",
-  "description": "",
+  "private": true,
+  "description": "an e-commerce application that allows users to buy and sell products online. It provides a platform for sellers to list their products and for buyers to browse and purchase them. The application includes features such as product listings, shopping cart functionality, user authentication, and payment processing.",
   "main": "index.js",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "nodemon",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .ts,.tsx",
+    "prepare": "husky install",
+    "commit": "cz"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "mongoose": "^8.14.0",
-    "nodemailer": "^6.10.1",
-    "zod": "^3.24.3"
-  },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/express": "^5.0.1",
-    "@types/node": "^22.15.2",
-    "@types/nodemailer": "^6.4.17",
-    "@typescript-eslint/eslint-plugin": "^8.31.0",
-    "@typescript-eslint/parser": "^8.31.0",
-    "eslint": "^9.25.1",
-    "eslint-config-prettier": "^10.1.2",
-    "eslint-plugin-prettier": "^5.2.6",
-    "nodemon": "^3.1.10",
-    "prettier": "^3.5.3",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
