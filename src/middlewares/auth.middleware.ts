@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
+import User from "../models/user.model";
 
 export interface AuthRequest extends Request {
   user?: any;
 }
 
-export const authenticate = (
+export const authenticate = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
@@ -23,6 +24,10 @@ export const authenticate = (
     return res.status(401).json({ error: "Invalid token" });
   }
 
-  req.user = decoded;
+  const user = await User.findById(decoded.id);
+  if (!user) return res.status(401).json({ error: "User not found" });
+
+  req.user = user;
+
   next();
 };

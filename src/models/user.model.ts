@@ -8,6 +8,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   role: "customer" | "admin" | "seller";
+  isVerified: boolean;
 }
 
 // 2. Define a schema for User
@@ -40,6 +41,10 @@ const userSchema: Schema<IUser> = new Schema(
       type: String,
       enum: ["customer", "admin", "seller"],
       default: "customer",
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

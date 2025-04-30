@@ -1,12 +1,14 @@
 import bcrypt from "bcrypt";
 import User, { IUser } from "../models/user.model";
 import { generateToken } from "../utils/jwt";
+import { sendEmail } from "../utils/nmailer";
 
 export const signup = async (
   email: string,
   password: string,
   firstName: string,
-  lastName: string
+  lastName: string,
+  role: "customer" | "admin" | "seller" = "customer"
 ): Promise<IUser> => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -20,8 +22,23 @@ export const signup = async (
     lastName,
     email,
     password: hashedPassword,
+    role,
   });
   await newUser.save();
+
+  // Generate verification token
+  const verifyToken = generateToken({ id: newUser._id, role }, "1d"); // expire in 1 day
+
+  const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verifyToken}`;
+
+  const emailContent = `
+    <h1>Verify your email</h1>
+    <p>Click the link below to verify your email:</p>
+    <a href="${verificationLink}">Verify Email</a>
+  `;
+
+  await sendEmail(email, "Verify your email", emailContent);
+
   return newUser;
 };
 
@@ -32,6 +49,10 @@ export const login = async (
   const user = await User.findOne({ email });
   if (!user) {
     throw new Error("Invalid email or password");
+  }
+
+  if (!user.isVerified) {
+    throw new Error("Email not verified. Please verify your email.");
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
