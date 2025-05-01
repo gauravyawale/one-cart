@@ -4,7 +4,7 @@
     "module": "commonjs",
     "baseUrl": ".",
     "paths": {
-      "@common/*": ["packages/common/src/*"]
+      "@one-cart/common": ["packages/common/*"]
     },
     "strict": true,
     "esModuleInterop": true,

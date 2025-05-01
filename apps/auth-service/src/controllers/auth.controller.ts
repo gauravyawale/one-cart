@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
 import * as authService from '../services/auth.service';
-import { verifyToken } from '../utils/jwt';
-import User from '../models/user.model';
-import { error } from 'console';
+import { User, IUser, UserRole, verifyToken } from '@one-cart/common';
 
 export const signupUser = async (req: Request, res: Response) => {
   try {
     const { email, password, firstName, lastName } = req.body;
-    const role = req.body.role || 'customer'; // Default to 'customer' if not provided
+    const role = req.body.role || UserRole.CUSTOMER; // Default to 'customer' if not provided
     const user = await authService.signup(email, password, firstName, lastName, role);
     res.status(201).json({ message: 'User created successfully', user });
   } catch (error: any) {

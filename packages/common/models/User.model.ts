@@ -1,13 +1,12 @@
-import { time } from 'console';
 import mongoose, { Document, Schema, Model } from 'mongoose';
-
+import { UserRole } from '../types/enums/User.enums';
 // 1. Define an interface for User document
 export interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  role: 'customer' | 'admin' | 'seller';
+  role: UserRole;
   isVerified: boolean;
 }
 
@@ -39,8 +38,8 @@ const userSchema: Schema<IUser> = new Schema(
     },
     role: {
       type: String,
-      enum: ['customer', 'admin', 'seller'],
-      default: 'customer',
+      enum: Object.values(UserRole),
+      default: UserRole.CUSTOMER,
     },
     isVerified: {
       type: Boolean,
@@ -51,7 +50,4 @@ const userSchema: Schema<IUser> = new Schema(
 );
 
 // 3. Create a model for User
-const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
-
-// 4. Export the model
-export default User;
+export const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);

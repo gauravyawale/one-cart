@@ -1,4 +1,4 @@
-import { IUser } from '../../models/user.model';
+import { IUser } from '@one-cart/models';
 
 declare global {
   namespace Express {

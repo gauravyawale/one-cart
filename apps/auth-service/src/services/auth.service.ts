@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
-import User, { IUser } from '../models/user.model';
-import { generateToken } from '../utils/jwt';
-import { sendEmail } from '../utils/nmailer';
+import { User, IUser, sendEmail, generateToken } from '@one-cart/common';
 
 export const signup = async (
   email: string,

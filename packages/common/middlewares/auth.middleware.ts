@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyToken } from '../utils/jwt';
-import User from '../models/user.model';
-
+import { verifyToken } from '../utils/jwt.util';
+import { User } from '../models/User.model';
 export interface AuthRequest extends Request {
   user?: any;
 }
 
-export const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticate = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<any> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
