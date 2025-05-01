@@ -10,30 +10,12 @@
   ],
   "scripts": {
     "format": "prettier --write .",
-    "lint": "eslint . --ext .ts,.tsx",
-    "prepare": "husky install",
-    "commit": "cz"
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@commitlint/cli": "^19.8.0",
-    "@commitlint/config-conventional": "^19.8.0",
-    "commitizen": "^4.3.1",
-    "cz-conventional-changelog": "^3.3.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.1",
     "prettier": "^3.5.3"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
