@@ -23,7 +23,12 @@ export const authenticate = async (
     return res.status(401).json({ error: 'Invalid token' });
   }
 
-  const user = await User.findById(decoded.id);
+  const user = await User.findById(decoded.id).select([
+    '-password',
+    '-__v',
+    '-createdAt',
+    '-updatedAt',
+  ]);
   if (!user) return res.status(401).json({ error: 'User not found' });
 
   req.user = user;
