@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const signupSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters long'),
+  firstName: z.string().min(1, { message: 'First name is required' }),
+  lastName: z.string().min(1, { message: 'Last name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z.string().min(6, { message: 'Password must be at least 6 characters long' }),
   role: z.enum(['customer', 'admin', 'seller']).optional(),
 });
 
 export const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email({ message: 'Invalid email address' }),
+  password: z.string().min(1, { message: 'Password is required' }),
 });

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { loginUser, signupUser, verifyEmail } from '../controllers/auth.controller';
-import { validate } from '../../../../packages/common/middlewares/validate.middleware';
 import { loginSchema, signupSchema } from '../validations/auth.validation';
+import { validate } from '@one-cart/common';
 
 const router = Router();
 

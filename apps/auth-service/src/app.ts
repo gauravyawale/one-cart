@@ -2,6 +2,8 @@ import express, { NextFunction, Request, Response } from 'express';
 import authRoutes from './routes/auth.routes';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.config';
+import { errorHandler } from '@one-cart/common/';
+import { logger } from '@one-cart/common';
 
 dotenv.config();
 
@@ -13,20 +15,19 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 
 //handle error
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+app.use(errorHandler);
+
+
 
 connectDB()
   .then(() => {
-    console.log('Database connected successfully');
+    logger.info('Connected to MongoDB');
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      logger.info(`Auth service running on port ${PORT}`);
     });
   })
   .catch((error) => {
-    console.error('Database connection error:', error);
+    logger.error('MongoDB connection error:', error);
     process.exit(1);
   });
