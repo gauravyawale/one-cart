@@ -1,6 +1,6 @@
+import { verifyAccessToken } from '@one-cart/common';
 import { Request, Response, NextFunction } from 'express';
-import { verifyToken } from '../utils/jwt.util';
-import { User } from '../models/User.model';
+import jwt from 'jsonwebtoken';
 export interface AuthRequest extends Request {
   user?: any;
 }
@@ -10,28 +10,15 @@ export const authenticate = async (
   res: Response,
   next: NextFunction,
 ): Promise<any> => {
-  const authHeader = req.headers.authorization;
+  const token = req.cookies.access_token;
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const decoded = verifyAccessToken(token);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(403).json({ error: 'Token expired or invalid' });
   }
-
-  const token = authHeader.split(' ')[1];
-  const decoded: any = verifyToken(token);
-
-  if (!decoded) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-
-  const user = await User.findById(decoded.id).select([
-    '-password',
-    '-__v',
-    '-createdAt',
-    '-updatedAt',
-  ]);
-  if (!user) return res.status(401).json({ error: 'User not found' });
-
-  req.user = user;
-
-  next();
 };
