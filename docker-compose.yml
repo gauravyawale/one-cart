@@ -9,9 +9,12 @@ services:
       - "8080:8080"
     environment:
       - NODE_ENV=development
+      - REDIS_HOST=redis
     volumes:
       - .:/app
       - /app/node_modules # Prevent local node_modules from overwriting inside container
+    depends_on:
+      - redis
 
   nginx:
     image: nginx:alpine
@@ -21,3 +24,9 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - auth-service
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --bind 0.0.0.0 # Ensure Redis binds to all interfaces for Docker connectivity
