@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as authService from '../services/auth.service';
-import { User, IUser, UserRole, logger } from '@one-cart/common';
+import { UserRole } from '@one-cart/common';
 import { sendOtp } from '../services/otp.service';
 import redis from '../config/redis.config';
 import { accessTokenOptions, refreshTokenOptions } from '../utils/cookie';
@@ -11,7 +11,6 @@ export const signupSendOtp = async (req: Request, res: Response): Promise<any> =
     await sendOtp(email)
     return res.status(200).json({ message: 'OTP sent to email' });
   } catch (error: any) {
-    logger.error('Error sending OTP:', error.message);
     res.status(400).json({ error: error.message });
   }
 };
@@ -60,7 +59,7 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export const refreshAccessToken = async (req: Request, res: Response) => {
+export const refreshAccessToken = async (req: Request, res: Response):Promise<any> => {
   try {
     const { refresh_Token } = req.cookies;
     if (!refresh_Token) {

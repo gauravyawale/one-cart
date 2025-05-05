@@ -1,33 +1,30 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_ACCESS_TOKEN_SECRET: jwt.Secret = process.env.JWT_SECRET_KEY || 'secretkey-very-long-and-random';
-const JWT_REFRESH_TOKEN_SECRET: jwt.Secret = process.env.JWT_SECRET_KEY || 'secretkey-very-long-and-random';
-
-export const generateAccessToken = (payload: Object, expiresIn = '15m'): string => {
+export const generateAccessToken = (payload: Object, expiresIn = '15m', secret: string): string => {
   return jwt.sign({
     exp: expiresIn,
     data: payload
-  }, JWT_ACCESS_TOKEN_SECRET);
+  }, secret);
 };
 
-export const verifyAccessToken = (token: string) => {
+export const verifyAccessToken = (token: string, secret: string) => {
   try {
-    return jwt.verify(token, JWT_ACCESS_TOKEN_SECRET);
+    return jwt.verify(token, secret);
   } catch (err) {
     return null;
   }
 };
 
-export const generateRefreshToken = (payload: Object, expiresIn = '7d'): string => {
+export const generateRefreshToken = (payload: Object, expiresIn = '7d', secret: string): string => {
   return jwt.sign({
     exp: expiresIn,
     data: payload
-  }, JWT_REFRESH_TOKEN_SECRET);
+  }, secret);
 };
 
-export const verifyRefreshToken = (token: string) => {
+export const verifyRefreshToken = (token: string, secret: string) => {
   try {
-    return jwt.verify(token, JWT_REFRESH_TOKEN_SECRET);
+    return jwt.verify(token, secret);
   } catch (err) {
     return null;
   }

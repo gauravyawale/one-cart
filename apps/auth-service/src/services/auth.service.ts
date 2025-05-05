@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User, IUser, sendEmail, generateAccessToken, generateRefreshToken, verifyRefreshToken } from '@one-cart/common';
+import { User, IUser, generateAccessToken, generateRefreshToken, verifyRefreshToken } from '@one-cart/common';
 
 export const signup = async (
   email: string,
@@ -24,19 +24,6 @@ export const signup = async (
   });
   await newUser.save();
 
-  // Generate verification token
-  const verifyToken = generateToken({ id: newUser._id, role }, '1d'); // expire in 1 day
-
-  const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${verifyToken}`;
-
-  const emailContent = `
-    <h1>Verify your email</h1>
-    <p>Click the link below to verify your email:</p>
-    <a href="${verificationLink}">Verify Email</a>
-  `;
-
-  await sendEmail(email, 'Verify your email', emailContent);
-
   return newUser;
 };
 
@@ -60,8 +47,8 @@ export const login = async (
 
   const paylaod = { id: user._id, email: user.email, role: user.role };
 
-  const accessToken = generateAccessToken(paylaod);
-  const refreshToken = generateRefreshToken(paylaod);
+  const accessToken = generateAccessToken(paylaod, '15m', process.env.JWT_ACCESS_TOKEN_SECRET as string);;
+  const refreshToken = generateRefreshToken(paylaod, '7d', process.env.JWT_REFRESH_TOKEN_SECRET as string);;
 
   return { user, accessToken, refreshToken };
 };
@@ -71,7 +58,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<{ access
     throw new Error('Refresh token not provided');
   }
 
-  const payload = verifyRefreshToken(refreshToken);
+  const payload: IUser = verifyRefreshToken(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET as string) as IUser;
   if (!payload) {
     throw new Error('Invalid refresh token');
   }
@@ -81,8 +68,8 @@ export const refreshAccessToken = async (refreshToken: string): Promise<{ access
     throw new Error('User not found');
   }
 
-  const newAccessToken = generateAccessToken(user);
-  const newRefreshToken = generateRefreshToken(user);
+  const newAccessToken = generateAccessToken(user, '15m', process.env.JWT_ACCESS_TOKEN_SECRET as string);
+  const newRefreshToken = generateRefreshToken(user, '7d', process.env.JWT_REFRESH_TOKEN_SECRET as string);
 
   return { accessToken: newAccessToken, refreshToken: newRefreshToken };
 } 

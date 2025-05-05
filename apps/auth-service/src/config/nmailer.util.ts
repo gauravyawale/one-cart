@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -18,6 +20,6 @@ export const sendEmail = async (to: string, subject: string, text: string) => {
     from: `${process.env.SMTP_FROM_NAME} <${process.env.SMTP_FROM_EMAIL}>`,
     to,
     subject,
-    text,
+    html: text,
   });
 };
