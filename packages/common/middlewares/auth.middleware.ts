@@ -15,7 +15,7 @@ export const authenticate = async (
   if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
-    const decoded = verifyAccessToken(token);
+    const decoded = verifyAccessToken(token, "jwt secret");
     req.user = decoded;
     next();
   } catch (error) {

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export const generateAccessToken = (payload: Object, expiresIn = '15m', secret: string): string => {
+export const generateAccessToken = (payload: Object, expiresIn: number, secret: string): string => {
   return jwt.sign({
     exp: expiresIn,
     data: payload
@@ -15,7 +15,7 @@ export const verifyAccessToken = (token: string, secret: string) => {
   }
 };
 
-export const generateRefreshToken = (payload: Object, expiresIn = '7d', secret: string): string => {
+export const generateRefreshToken = (payload: Object, expiresIn: number, secret: string): string => {
   return jwt.sign({
     exp: expiresIn,
     data: payload

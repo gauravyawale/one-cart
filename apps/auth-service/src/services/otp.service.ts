@@ -25,3 +25,24 @@ export const sendOtp = async (email: string) => {
 
     await sendEmail(email, emailSubject, emailContent);
 }
+
+export const sendForgotPWOtp = async (email: string) => {
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+        throw new Error('Invalid email address');
+    }
+    const otp = generateOtp();
+    await redis.set(`reset_pw_otp:${email}`, otp, 'EX', 300); // Store OTP in Redis for 5 minutes
+    const emailSubject = "Your One-Cart OTP Verification Code For Password Reset";
+
+    const emailContent = `
+    <h1>Hello,</h1>
+    <p>Please use the OTP below to reset your password:</p>
+    <h2>${otp}</h2>
+    <p>This OTP is valid for 5 minutes. If you did not request this, please ignore this email.</p>
+    </br>
+    <p>Best regards,</p>
+    <p>The One-Cart Team</p>`;
+
+    await sendEmail(email, emailSubject, emailContent);
+}
