@@ -6,4 +6,9 @@ const redis = new Redis({
   port: parseInt(process.env.REDIS_PORT || '6379', 10),
 });
 
+redis.on('error', (err) => {
+  console.error('Redis connection error:', err);
+});
+
+
 export default redis;

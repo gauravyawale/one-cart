@@ -1,6 +1,7 @@
-import { sendEmail, User } from "@one-cart/common"
+import { User } from "@one-cart/common"
 import { generateOtp } from "../utils/generateOtp";
 import redis from "../config/redis.config";
+import { sendEmail } from "../config/nmailer.util";
 
 export const sendOtp = async (email: string) => {
     const existingUser = await User.findOne({ email });
@@ -8,7 +9,6 @@ export const sendOtp = async (email: string) => {
         throw new Error('User already exist');
     }
     const otp = generateOtp();
-
     await redis.set(`register_otp:${email}`, otp, 'EX', 300); // Store OTP in Redis for 5 minutes
     const emailSubject = "Your One-Cart OTP Verification Code";
 
@@ -19,6 +19,28 @@ export const sendOtp = async (email: string) => {
     <h2>${otp}</h2>
     <p>This OTP is valid for 5 minutes. If you did not request this, please ignore this email.</p>
     <p>Welcome to One-Cart!</p>
+    </br>
+    <p>Best regards,</p>
+    <p>The One-Cart Team</p>`;
+
+    await sendEmail(email, emailSubject, emailContent);
+}
+
+export const sendForgotPWOtp = async (email: string) => {
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+        throw new Error('Invalid email address');
+    }
+    const otp = generateOtp();
+    await redis.set(`reset_pw_otp:${email}`, otp, 'EX', 300); // Store OTP in Redis for 5 minutes
+    const emailSubject = "Your One-Cart OTP Verification Code For Password Reset";
+
+    const emailContent = `
+    <h1>Hello,</h1>
+    <p>Please use the OTP below to reset your password:</p>
+    <h2>${otp}</h2>
+    <p>This OTP is valid for 5 minutes. If you did not request this, please ignore this email.</p>
+    </br>
     <p>Best regards,</p>
     <p>The One-Cart Team</p>`;
 

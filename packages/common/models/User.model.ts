@@ -49,5 +49,14 @@ const userSchema: Schema<IUser> = new Schema(
   { timestamps: true },
 );
 
+// ✅ TTL index for deleting guest users after 1 hour
+userSchema.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: 3600,
+    partialFilterExpression: { role: "guest" },
+  },
+);
+
 // 3. Create a model for User
 export const User: Model<IUser> = mongoose.model<IUser>('User', userSchema);
