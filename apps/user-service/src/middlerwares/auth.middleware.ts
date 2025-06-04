@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { User, verifyToken } from '@one-cart/common';
+import { User, verifyAccessToken } from '@one-cart/common';
 export interface AuthRequest extends Request {
   user?: any;
 }
@@ -12,7 +12,7 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
   }
 
   const token = authHeader.split(' ')[1];
-  const decoded = verifyToken(token);
+  const decoded = verifyAccessToken(token, process.env.ACCESS_TOKEN_SECRET as string);
 
   if (!decoded) {
     return res.status(401).json({ error: 'Invalid token' });

@@ -1,6 +1,7 @@
 import { User } from '@one-cart/common';
 
 export const getUser = async (req: any, res: any) => {
+  console.log('Fetching user details...', req.user);
   try {
     const user = req.user;
     if (!user) {
@@ -32,8 +33,6 @@ export const updateUser = async (req: any, res: any) => {
 
 export const deleteUser = async (req: any, res: any) => {
   try {
-    const { firstName, lastName } = req.body;
-
     const user = await User.findByIdAndDelete(req.user._id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
