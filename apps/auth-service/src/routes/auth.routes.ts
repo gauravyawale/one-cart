@@ -20,8 +20,8 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 // POST /auth/change-password - Change user password
 router.post('/change-password', authenticate, changePassword);
-// GET /auth/logout - Logout user
-router.get('/logout', logoutUser);
+// POST /auth/logout - Logout user
+router.post('/logout', logoutUser);
 // POST /auth/guest-login - Login as guest user
 router.post('/guest-login', loginAsGuest);
 

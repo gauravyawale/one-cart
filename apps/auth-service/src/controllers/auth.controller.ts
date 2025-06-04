@@ -41,8 +41,8 @@ export const loginUser = async (req: Request, res: Response) => {
     const { user, accessToken, refreshToken } = await authService.login(email, password);
 
     // set token in cookie
-    res.cookie('access_Token', accessToken, accessTokenOptions);
-    res.cookie('refresh_Token', refreshToken, refreshTokenOptions);
+    res.cookie('access_token', accessToken, accessTokenOptions);
+    res.cookie('refresh_token', refreshToken, refreshTokenOptions);
     res.status(200).json({ message: 'Login successful', user });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -66,8 +66,8 @@ export const refreshAccessToken = async (req: Request, res: Response):Promise<an
 
 export const logoutUser = async (req: Request, res: Response): Promise<any> => {
   try {
-    res.clearCookie('access_Token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-    res.clearCookie('refresh_Token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.clearCookie('access_token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.clearCookie('refresh_token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
     res.status(200).json({ message: 'Logout successful' });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -117,8 +117,8 @@ export const loginAsGuest = async (req: Request, res: Response): Promise<any> =>
   try {
     const guestIp = req.ip || req.connection.remoteAddress || '';
     const { accessToken, refreshToken } = await authService.loginAsGuest(guestIp);
-    res.cookie('access_Token', accessToken, accessTokenOptions);
-    res.cookie('refresh_Token', refreshToken, refreshTokenOptions);
+    res.cookie('access_token', accessToken, accessTokenOptions);
+    res.cookie('refresh_token', refreshToken, refreshTokenOptions);
     res.status(200).json({ message: 'Guest login successful' });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
